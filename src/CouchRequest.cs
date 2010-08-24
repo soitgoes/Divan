@@ -217,7 +217,8 @@ namespace Divan
         private HttpWebRequest GetRequest()
         {
             var requestUri = new UriBuilder("http", server.Host, server.Port, ((db != null) ? db.Name + "/" : "") + path, query).Uri;
-            var request = WebRequest.Create(requestUri) as HttpWebRequest;
+            
+			var request = WebRequest.Create(requestUri) as HttpWebRequest;
             if (request == null)
             {
                 throw CouchException.Create("Failed to create request");
@@ -228,6 +229,9 @@ namespace Divan
             if (mimeType != null)
             {
                 request.ContentType = mimeType;
+            }else
+            {
+            	request.ContentType = "application/json";
             }
 
             foreach (var header in headers)
@@ -237,7 +241,8 @@ namespace Divan
 
             if (!string.IsNullOrEmpty(server.EncodedCredentials))
 			{
-                request.Headers.Add("Authorization", server.EncodedCredentials);
+                //request.Headers.Add("Authorization", server.EncodedCredentials); // this implementation broke in 1.0.1
+				request.Credentials = server.NetworkCredential;
 			}
 			
             if (postStream != null)

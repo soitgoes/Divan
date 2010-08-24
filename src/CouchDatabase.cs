@@ -131,6 +131,21 @@ namespace Divan
             return QueryAllDocuments().IncludeDocuments().GetResult().Documents<T>();
         }
 
+		public IEnumerable<string> GetAttachmentNames(string docid)
+		{
+			var result = new List<string>();
+			var doc = GetDocument(docid);
+			var attachments= doc.Obj["_attachments"];
+			var token = attachments.FirstOrDefault();
+			while(token != null)
+			{
+				var tmp = (JProperty) token;
+				result.Add(tmp.Name);
+				token = attachments.Next;
+			}
+			return result;
+		}
+
         /// <summary>
         /// Return all documents in the database, but only with id and revision.
         /// CouchDocument does not contain the actual content.
@@ -643,7 +658,7 @@ namespace Divan
             {
                 try
                 {
-                    return new CouchJsonDocument(Request(documentId).Parse());
+                    return new CouchJsonDocument(Request(documentId).MimeTypeJson().Parse());
                 }
                 catch (WebException e)
                 {
@@ -764,6 +779,15 @@ namespace Divan
             return HasAttachment(document.Id, attachmentName);
         }
 
+		/// <summary>
+		/// Returns whether or not the document has any attachments
+		/// </summary>
+		/// <param name="document"></param>
+		/// <returns></returns>
+		public bool HasAttachment(ICouchDocument document)
+		{
+			return HasAttachment(document.Id);
+		}
         public bool HasDocumentChanged(ICouchDocument document)
         {
             return HasDocumentChanged(document.Id, document.Rev);
@@ -804,7 +828,7 @@ namespace Divan
         {
             try
             {
-                Request(documentId + "/" + attachmentName).Head().Send();
+				Request(documentId + "/").Head().Send();
                 return true;
             }
             catch (WebException)
@@ -812,6 +836,18 @@ namespace Divan
                 return false;
             }
         }
+
+		public bool HasAttachment(string documentId)
+		{
+			try
+			{
+				var doc = GetDocument(documentId);
+				return doc.ToString().Contains("_attachment");
+			}catch(WebException)
+			{
+				return false;
+			}
+		}
 
         /// <summary>
         /// Copies a document based on its document id.

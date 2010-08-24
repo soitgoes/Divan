@@ -77,5 +77,15 @@ namespace Divan
         ICouchDocument WriteDocument(string json, string documentId);
         ICouchDocument WriteDocument(ICouchDocument document);
         ICouchDocument WriteDocument(ICouchDocument document, bool batch);
+    	bool HasAttachment(string documentId);
+
+    	/// <summary>
+    	/// Returns whether or not the document has any attachments
+    	/// </summary>
+    	/// <param name="document"></param>
+    	/// <returns></returns>
+    	bool HasAttachment(ICouchDocument document);
+
+    	IEnumerable<string> GetAttachmentNames(string docid);
     }
 }

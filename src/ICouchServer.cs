@@ -1,4 +1,6 @@
-﻿namespace Divan
+﻿using System.Net;
+
+namespace Divan
 {
     public interface ICouchServer
     {
@@ -25,5 +27,6 @@
         string UserName { get; }
         string Password { get; }
         string EncodedCredentials { get; }
+    	NetworkCredential NetworkCredential { get; }
     }
 }
