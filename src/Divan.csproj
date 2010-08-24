@@ -39,11 +39,13 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Data" />
     <Reference Include="System.Web" />
     <Reference Include="nunit.framework, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CouchBulkDeleteDocuments.cs" />
@@ -61,6 +63,7 @@
     <Compile Include="CouchQueryDocument.cs" />
     <Compile Include="CouchRequest.cs" />
     <Compile Include="CouchServer.cs" />
+    <Compile Include="CouchUser.cs" />
     <Compile Include="CouchViewDefinitionBase.cs" />
     <Compile Include="CouchViewResult.cs" />
     <Compile Include="CouchViewDefinition.cs" />

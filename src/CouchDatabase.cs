@@ -479,7 +479,7 @@ namespace Divan
         {
             try
             {
-                JObject result = Request().Data(CouchDocument.WriteJson(document)).Post().Check("Failed to create document").Result();
+                JObject result = Request().Data(CouchDocument.WriteJson(document)).PostJson().Check("Failed to create document").Result();
                 document.Id = result["id"].Value<string>();
                 document.Rev = result["rev"].Value<string>();
                 return document;
@@ -773,8 +773,18 @@ namespace Divan
         {
             return HasDocument(document.Id);
         }
-
-        public bool HasAttachment(ICouchDocument document, string attachmentName)
+		public string[] GetAttachmentNames(ICouchDocument document)
+		{
+			var doc = GetDocument(document.Id);
+			var attachments = doc.Obj["_attachments"];
+			if (attachments == null) return null;
+			return attachments.Select(x => x.Value<JProperty>().Name).ToArray();			
+		}
+		public bool HasAttachment(ICouchDocument document)
+		{
+			return GetAttachmentNames(document) != null ; 
+		}
+    	public bool HasAttachment(ICouchDocument document, string attachmentName)
         {
             return HasAttachment(document.Id, attachmentName);
         }
