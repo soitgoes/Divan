@@ -789,16 +789,7 @@ namespace Divan
             return HasAttachment(document.Id, attachmentName);
         }
 
-		/// <summary>
-		/// Returns whether or not the document has any attachments
-		/// </summary>
-		/// <param name="document"></param>
-		/// <returns></returns>
-		public bool HasAttachment(ICouchDocument document)
-		{
-			return HasAttachment(document.Id);
-		}
-        public bool HasDocumentChanged(ICouchDocument document)
+	public bool HasDocumentChanged(ICouchDocument document)
         {
             return HasDocumentChanged(document.Id, document.Rev);
         }
