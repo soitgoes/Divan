@@ -25,5 +25,12 @@
         string UserName { get; }
         string Password { get; }
         string EncodedCredentials { get; }
+
+    	/// <summary>
+    	/// Creates a uesr on the couchdb
+    	/// </summary>
+    	/// <param name="username">Username</param>
+    	/// <param name="password">Password</param>
+    	void CreateUser(string username, string password);
     }
 }

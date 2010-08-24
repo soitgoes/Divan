@@ -6,6 +6,7 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Divan
 {
@@ -26,8 +27,8 @@ namespace Divan
         private readonly string host;
         private readonly int port;
 
-        private readonly string userName;
-        private readonly string password;
+        private string userName;
+        private string password;
         private readonly string encodedCredentials;
 
         private string databasePrefix = ""; // Used by databases to prefix their names
@@ -230,6 +231,34 @@ namespace Divan
                 throw CouchException.Create("Failed to create database", e);
             }
         }
+		/// <summary>
+		/// Creates a uesr on the couchdb
+		/// </summary>
+		/// <param name="username">Username</param>
+		/// <param name="pass">Password</param>
+		public void CreateUser(string username, string pass)
+		{
+			try
+			{
+				pass = "\"" + pass + "\"";
+				Request().Path("_config/admins/" + username).Put().Data(pass).Check("Bleh");
+				
+				var server = new CouchServer(host, port, username, pass);
+				var userDb = server.GetDatabase("_users");
+
+				var salt = Guid.NewGuid();
+
+				var user = new CouchUser(username, pass);
+				userDb.SaveDocument(user);
+				
+			}
+			catch (WebException e)
+			{
+				throw CouchException.Create("Failed to create user", e);
+			}
+		}
+
+
 
         public void DeleteAllDatabases()
         {

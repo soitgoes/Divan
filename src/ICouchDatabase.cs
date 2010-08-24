@@ -77,5 +77,7 @@ namespace Divan
         ICouchDocument WriteDocument(string json, string documentId);
         ICouchDocument WriteDocument(ICouchDocument document);
         ICouchDocument WriteDocument(ICouchDocument document, bool batch);
+    	string[] GetAttachmentNames(ICouchDocument document);
+    	bool HasAttachment(ICouchDocument document);
     }
 }
